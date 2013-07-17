@@ -127,7 +127,6 @@ module GContacts
       nodes.each do |address|
         new_address = {}
         new_address['gd:formattedAddress'] = address['gd:formattedAddress']
-        new_address['gd:street'] = address['gd:street']
         unless address['@rel'].nil?
           new_address['type'] = address['@rel']
         else

@@ -102,6 +102,7 @@ describe GContacts::Client do
       contact.data.should == {"gd:name"=>[{"gd:fullName"=>"Jane Doe", "gd:givenName"=>"Jane", "gd:familyName"=>"Doe"}], "gd:email"=>[{"@rel"=>"http://schemas.google.com/g/2005#home", "@address"=>"jane.doe@gmail.com", "@primary"=>"true"}], "gd:phoneNumber"=>[{"text"=>"16004003000", "@rel"=>"http://schemas.google.com/g/2005#mobile"}], "gd:structuredPostalAddress"=>[{"gd:formattedAddress"=>"5 Market St\n        San Francisco\n        CA", "gd:street"=>"5 Market St", "gd:city"=>"San Francisco", "gd:region"=>"CA", "@rel"=>"http://schemas.google.com/g/2005#home"}], "gContact:groupMembershipInfo"=>[{"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}]}
       contact.emails.should == [{"type"=>"http://schemas.google.com/g/2005#home", "address"=>"jane.doe@gmail.com"}]
       contact.phones.should == [{"type"=>"http://schemas.google.com/g/2005#mobile", "number"=>"16004003000"}]
+      contact.addresses.should == [{"gd:formattedAddress"=>"5 Market St\n        San Francisco\n        CA", "type"=>"http://schemas.google.com/g/2005#home"}]
     end
 
     it "paginates through all" do
@@ -186,7 +187,7 @@ describe GContacts::Client do
       element.title.should == 'Foo "Doe" Bar'
 
       mock_response(File.read("spec/responses/contacts/update.xml")) do |http_mock, res_mock|
-        http_mock.should_receive(:request_put).with("/m8/feeds/contacts/default/base/32c39d7106a538e", "<?xml version='1.0' encoding='UTF-8'?>\n#{element.to_xml}", hash_including("Authorization" => "Bearer 12341234", "If-Match" => element.etag)).and_return(res_mock)
+        http_mock.should_receive(:request_put).with("/m8/feeds/contacts/default/full/32c39d7106a538e", "<?xml version='1.0' encoding='UTF-8'?>\n#{element.to_xml}", hash_including("Authorization" => "Bearer 12341234", "If-Match" => element.etag)).and_return(res_mock)
       end
 
       updated = client.update!(element)
@@ -383,7 +384,7 @@ describe GContacts::Client do
       element.content.should == "Bar Bar"
 
       mock_response(File.read("spec/responses/groups/update.xml")) do |http_mock, res_mock|
-        http_mock.should_receive(:request_put).with("/m8/feeds/groups/default/base/3f93e3738e811d63", "<?xml version='1.0' encoding='UTF-8'?>\n#{element.to_xml}", hash_including("Authorization" => "Bearer 12341234", "If-Match" => element.etag)).and_return(res_mock)
+        http_mock.should_receive(:request_put).with("/m8/feeds/groups/default/full/3f93e3738e811d63", "<?xml version='1.0' encoding='UTF-8'?>\n#{element.to_xml}", hash_including("Authorization" => "Bearer 12341234", "If-Match" => element.etag)).and_return(res_mock)
       end
 
       updated = client.update!(element)
