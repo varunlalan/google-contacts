@@ -2,8 +2,9 @@ require 'net/http'
 
 module GContacts
   class Element
-    attr_accessor :title, :content, :data, :category, :etag, :group_id, :name, :email, :emails
-    attr_reader :id, :edit_uri, :modifier_flag, :updated, :batch, :photo_uri, :phones
+    attr_accessor :title, :content, :data, :category, :etag, :group_id, :name, :email, :emails,
+      :phone, :phones, :address, :addresses
+    attr_reader :id, :edit_uri, :modifier_flag, :updated, :batch, :photo_uri
 
     ##
     # Creates a new element by parsing the returned entry from Google
@@ -14,6 +15,7 @@ module GContacts
       return unless entry
 
       @id, @updated, @content, @title, @etag, @name, @email = entry["id"], entry["updated"], entry["content"], entry["title"], entry["@gd:etag"], entry["gd:name"], entry["gd:email"]
+      @phone, @address = entry["gd:phoneNumber"], entry["gd:structuredPostalAddress"]
 
       @photo_uri = nil
       if entry["category"]
@@ -111,6 +113,28 @@ module GContacts
         end
 
         @emails << new_email
+      end
+
+      @addresses = []
+      if entry["gd:structuredPostalAddress"].is_a?(Array)
+        nodes = entry["gd:structuredPostalAddress"]
+      elsif !entry["gd:structuredPostalAddress"].nil?
+        nodes = [entry["gd:structuredPostalAddress"]]
+      else
+        nodes = []
+      end
+
+      nodes.each do |address|
+        new_address = {}
+        new_address['gd:formattedAddress'] = address['gd:formattedAddress']
+        new_address['gd:street'] = address['gd:street']
+        unless address['@rel'].nil?
+          new_address['type'] = address['@rel']
+        else
+          new_address['type'] = address['@label']
+        end
+
+        @addresses << new_address
       end
     end
 
