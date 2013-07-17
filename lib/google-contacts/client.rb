@@ -185,7 +185,7 @@ module GContacts
 
       xml = "<?xml version='1.0' encoding='UTF-8'?>\n#{element.to_xml}"
 
-      data = nori_parse(http_request(:put, URI(uri[:get] % [:base, File.basename(element.id)]), :body => xml, :headers => {"Content-Type" => "application/atom+xml", "If-Match" => element.etag}))
+      data = nori_parse(http_request(:put, URI(uri[:update] % File.basename(element.id)), :body => xml, :headers => {"Content-Type" => "application/atom+xml", "If-Match" => element.etag}))
       unless data["entry"]
         raise InvalidResponse, "Updated but response wasn't a valid element"
       end
