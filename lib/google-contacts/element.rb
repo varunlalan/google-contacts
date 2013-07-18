@@ -2,8 +2,8 @@ require 'net/http'
 
 module GContacts
   class Element
-    attr_accessor :title, :content, :data, :category, :etag, :group_id, :name, :email, :emails,
-      :phone, :phones, :address, :addresses
+    attr_accessor :title, :content, :data, :category, :etag, :group_id, :name, :emails, #:emails,
+      :phones, :addresses#, :addresses, :phones
     attr_reader :id, :edit_uri, :modifier_flag, :updated, :batch, :photo_uri
 
     ##
@@ -14,8 +14,8 @@ module GContacts
       @data = {}
       return unless entry
 
-      @id, @updated, @content, @title, @etag, @name, @email = entry["id"], entry["updated"], entry["content"], entry["title"], entry["@gd:etag"], entry["gd:name"], entry["gd:email"]
-      @phone, @address = entry["gd:phoneNumber"], entry["gd:structuredPostalAddress"]
+      @id, @updated, @content, @title, @etag, @name, @emails = entry["id"], entry["updated"], entry["content"], entry["title"], entry["@gd:etag"], entry["gd:name"], entry["gd:email"]
+      # @address = entry["gd:structuredPostalAddress"]
 
       @photo_uri = nil
       if entry["category"]
@@ -84,9 +84,9 @@ module GContacts
       nodes.each do |phone|
         if phone.respond_to? :attributes
           new_phone = {}
-          new_phone['number'] = phone
+          new_phone['text'] = phone
           unless phone.attributes['rel'].nil?
-            new_phone['type'] = phone.attributes['rel']
+            new_phone['@rel'] = phone.attributes['rel']
           else
             new_phone['type'] = phone.attributes['label']
           end
@@ -94,26 +94,26 @@ module GContacts
         end
       end
 
-      @emails = []
-      if entry["gd:email"].is_a?(Array)
-        nodes = entry["gd:email"]
-      elsif !entry["gd:email"].nil?
-        nodes = [entry["gd:email"]]
-      else
-        nodes = []
-      end
+      # @emails = []
+      # if entry["gd:email"].is_a?(Array)
+      #   nodes = entry["gd:email"]
+      # elsif !entry["gd:email"].nil?
+      #   nodes = [entry["gd:email"]]
+      # else
+      #   nodes = []
+      # end
 
-      nodes.each do |email|
-        new_email = {}
-        new_email['address'] = email['@address']
-        unless email['@rel'].nil?
-          new_email['type'] = email['@rel']
-        else
-          new_email['type'] = email['@label']
-        end
+      # nodes.each do |email|
+      #   new_email = {}
+      #   new_email['address'] = email['@address']
+      #   unless email['@rel'].nil?
+      #     new_email['type'] = email['@rel']
+      #   else
+      #     new_email['type'] = email['@label']
+      #   end
 
-        @emails << new_email
-      end
+      #   @emails << new_email
+      # end
 
       @addresses = []
       if entry["gd:structuredPostalAddress"].is_a?(Array)
