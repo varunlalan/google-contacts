@@ -1,5 +1,11 @@
 require 'net/http'
 
+REL = {
+  '0' => "http://schemas.google.com/g/2005#work",   # Work
+  '1' => "http://schemas.google.com/g/2005#home",   # Home
+  '2' => "http://schemas.google.com/g/2005#other"   # Other
+}
+
 module GContacts
   class Element
     attr_accessor :title, :content, :data, :category, :etag, :group_id, :name, :emails, #:emails,
@@ -207,82 +213,162 @@ module GContacts
 
     alias to_s inspect
 
+    ##
+    # Using below methods instead of attr_accessor for updating details of a contact
+    # NOTE: these methods will also create a new individual email, etc if not present
+    #
+    # Update addresses
+    # Usage : element.update_address(array_of_addresses)
+    # parameter is of the form [work, home, *others]
+    # if paramater is left empty, it will remove all the addresses from a contact
+    #
+    def update_addresses(addresses = [])
+      data.delete("gd:structuredPostalAddress")
+      return unless addresses.any?
+
+      data.merge!('gd:structuredPostalAddress' => [])
+      addresses.each_with_index do |address, i|
+        if ((i > 1) && (address))
+          data['gd:structuredPostalAddress'] << {"@rel" => REL['2'], "gd:formattedAddress" => "#{address}" }
+        elsif address
+          data['gd:structuredPostalAddress'] << {"@rel" => REL["#{i}"], "gd:formattedAddress" => "#{address}" }
+        end
+      end
+    end
+
+    # Update email addresses
+    # Usage : element.update_email(array_of_emails)
+    # parameter is of the form [work, home, *others]
+    # if paramater is left empty, it will remove all the emails from a contact
+    #
+    def update_emails(emails = [])
+      data.delete("gd:email")
+      return unless emails.any?
+
+      data.merge!('gd:email' => [])
+      emails.each_with_index do |email, i|
+        if ((i > 1) && (email))
+          data['gd:email'] << {"@rel" => REL['2'], "@address" => "#{email}" }
+        elsif email
+          data['gd:email'] << {"@rel" => REL["#{i}"], "@address" => "#{email}" }
+        end
+      end
+      data['gd:email'].first.merge!("@primary"=>"true")
+    end
+
+    # Update phones
+    # Usage : element.update_email(array_of_mobile, array_of_phones)
+    # parameter(array_of_phones) is of the form [work, home, *others]
+    # if paramater is left empty, it will remove all the mobiles/phones from a contact
+    #
+    def update_phones(mobiles = [], phones = [])
+      data.delete("gd:phoneNumber")
+      return unless (mobiles.any? && phones.any?)
+
+      data.merge!('gd:phoneNumber' => [])
+      # update mobile numbers
+      mobiles.each do |mobile|
+        data['gd:phoneNumber'] << {"@rel" => 'http://schemas.google.com/g/2005#mobile', "text" => "#{mobile}" } if mobile
+      end if mobiles.any?
+      # update phone numbers
+      phones.each_with_index do |phone, i|
+        if ((i > 1) && (phone))
+          data['gd:phoneNumber'] << {"@rel" => REL['2'], "text" => "#{phone}" }
+        elsif phone
+          data['gd:phoneNumber'] << {"@rel" => REL["#{i}"], "text" => "#{phone}" }
+        end
+      end if phones.any?
+    end
+
+    # Update name
+    # usage : element.update_name(full_name_of_a_contact)
+    #
+    def update_name(full_name)
+      if data['gd:name']
+        hash = data['gd:name'].first
+        hash.select! {|k,v| ['gd:fullName'].include?(k)}
+        hash['gd:fullName'] = "#{full_name}"
+      else
+        data.merge!("gd:name" => [{"gd:fullName" => "#{full_name}"}])
+      end
+    end
+
     private
     # Evil ahead
-    def handle_data(tag, data, indent)
-      if data.is_a?(Array)
-        xml = ""
-        data.each do |value|
-          xml << write_tag(tag, value, indent)
+      def handle_data(tag, data, indent)
+        if data.is_a?(Array)
+          xml = ""
+          data.each do |value|
+            xml << write_tag(tag, value, indent)
+          end
+        else
+          xml = write_tag(tag, data, indent)
         end
-      else
-        xml = write_tag(tag, data, indent)
+
+        xml
       end
 
-      xml
-    end
+      def write_tag(tag, data, indent)
+        xml = " " * indent
+        xml << "<" << tag
 
-    def write_tag(tag, data, indent)
-      xml = " " * indent
-      xml << "<" << tag
+        # Need to check for any additional attributes to attach since they can be mixed in
+        misc_keys = 0
+        if data.is_a?(Hash)
+          misc_keys = data.length
 
-      # Need to check for any additional attributes to attach since they can be mixed in
-      misc_keys = 0
-      if data.is_a?(Hash)
-        misc_keys = data.length
+          data.each do |key, value|
+            next unless key =~ /^@(.+)/
+            xml << " #{$1}='#{value}'"
+            misc_keys -= 1
+          end
+
+          # We explicitly converted the Nori::StringWithAttributes to a hash
+          if data["text"] and misc_keys == 1
+            data = data["text"]
+          end
+
+        # Nothing to filter out so we can just toss them on
+        elsif data.is_a?(Nori::StringWithAttributes)
+          data.attributes.each {|k, v| xml << " #{k}='#{v}'"}
+        end
+
+        # Just a string, can add it and exit quickly
+        if !data.is_a?(Array) and !data.is_a?(Hash)
+          xml << ">"
+          xml << data.to_s
+          xml << "</#{tag}>\n"
+          return xml
+        # No other data to show, was just attributes
+        elsif misc_keys == 0
+          xml << "/>\n"
+          return xml
+        end
+
+        # Otherwise we have some recursion to do
+        xml << ">\n"
 
         data.each do |key, value|
-          next unless key =~ /^@(.+)/
-          xml << " #{$1}='#{value}'"
-          misc_keys -= 1
+          next if key =~ /^@/
+          xml << handle_data(key, value, indent + 2)
         end
 
-        # We explicitly converted the Nori::StringWithAttributes to a hash
-        if data["text"] and misc_keys == 1
-          data = data["text"]
-        end
-
-      # Nothing to filter out so we can just toss them on
-      elsif data.is_a?(Nori::StringWithAttributes)
-        data.attributes.each {|k, v| xml << " #{k}='#{v}'"}
-      end
-
-      # Just a string, can add it and exit quickly
-      if !data.is_a?(Array) and !data.is_a?(Hash)
-        xml << ">"
-        xml << data.to_s
+        xml << " " * indent
         xml << "</#{tag}>\n"
-        return xml
-      # No other data to show, was just attributes
-      elsif misc_keys == 0
-        xml << "/>\n"
-        return xml
       end
 
-      # Otherwise we have some recursion to do
-      xml << ">\n"
+      def parse_element(unparsed)
+        data = {}
 
-      data.each do |key, value|
-        next if key =~ /^@/
-        xml << handle_data(key, value, indent + 2)
+        if unparsed.is_a?(Hash)
+          data = unparsed
+        elsif unparsed.is_a?(Nori::StringWithAttributes)
+          data["text"] = unparsed.to_s
+          unparsed.attributes.each {|k, v| data["@#{k}"] = v}
+        end
+
+        data
       end
-
-      xml << " " * indent
-      xml << "</#{tag}>\n"
-    end
-
-    def parse_element(unparsed)
-      data = {}
-
-      if unparsed.is_a?(Hash)
-        data = unparsed
-      elsif unparsed.is_a?(Nori::StringWithAttributes)
-        data["text"] = unparsed.to_s
-        unparsed.attributes.each {|k, v| data["@#{k}"] = v}
-      end
-
-      data
-    end
   end
 end
 
