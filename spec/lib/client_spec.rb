@@ -180,33 +180,23 @@ describe GContacts::Client do
       created.edit_uri.should == URI("https://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/32c39d7106a538e")
     end
 
-    describe 'Updates' do
-      before(:each) do
-        @element = GContacts::Element.new(parser.parse(File.read("spec/responses/contacts/update.xml"))["entry"])
+    it "updates an existing one" do
+      client = GContacts::Client.new(:access_token => "12341234")
+
+      element = GContacts::Element.new(parser.parse(File.read("spec/responses/contacts/update.xml"))["entry"])
+      element.title.should == 'Foo "Doe" Bar'
+
+      mock_response(File.read("spec/responses/contacts/update.xml")) do |http_mock, res_mock|
+        http_mock.should_receive(:request_put).with("/m8/feeds/contacts/default/full/32c39d7106a538e", "<?xml version='1.0' encoding='UTF-8'?>\n#{element.to_xml}", hash_including("Authorization" => "Bearer 12341234", "If-Match" => element.etag)).and_return(res_mock)
       end
 
-      it 'should update name of a contact' do
-        @element.data['gd:name'].first['gd:fullName'].should == 'Foo "Doe" Bar'
-        @element.update_name('Robert Downey Jr.')
-        @element.data['gd:name'].first['gd:fullName'].should == 'Robert Downey Jr.'
-      end
+      updated = client.update!(element)
+      updated.should be_a_kind_of(GContacts::Element)
+      updated.id.should == "http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/base/32c39d7106a538e"
+      updated.title.should == 'Foo "Doe" Bar'
+      updated.data.should == {"gd:name" => [{"gd:fullName" => "Foo \"Doe\" Bar", "gd:givenName" => "Foo Bar", "gd:additionalName" => "\"Doe\""}], "gd:email" => [{"@rel" => "http://schemas.google.com/g/2005#other", "@address" => "casey@gmail.com", "@primary" => "true"}, {"@rel" => "http://schemas.google.com/g/2005#work", "@address" => "foo.bar@gmail.com"}]}
+      updated.edit_uri.should == URI("https://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/base/32c39d7106a538e")
     end
-
-    # it "updates an existing one" do
-
-    #   element.title.should == 'Foo "Doe" Bar'
-
-    #   mock_response(File.read("spec/responses/contacts/update.xml")) do |http_mock, res_mock|
-    #     http_mock.should_receive(:request_put).with("/m8/feeds/contacts/default/full/32c39d7106a538e", "<?xml version='1.0' encoding='UTF-8'?>\n#{element.to_xml}", hash_including("Authorization" => "Bearer 12341234", "If-Match" => element.etag)).and_return(res_mock)
-    #   end
-
-    #   updated = client.update!(element)
-    #   updated.should be_a_kind_of(GContacts::Element)
-    #   updated.id.should == "http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/base/32c39d7106a538e"
-    #   updated.title.should == 'Foo "Doe" Bar'
-    #   updated.data.should == {"gd:name" => [{"gd:fullName" => "Foo \"Doe\" Bar", "gd:givenName" => "Foo Bar", "gd:additionalName" => "\"Doe\""}], "gd:email" => [{"@rel" => "http://schemas.google.com/g/2005#other", "@address" => "casey@gmail.com", "@primary" => "true"}, {"@rel" => "http://schemas.google.com/g/2005#work", "@address" => "foo.bar@gmail.com"}]}
-    #   updated.edit_uri.should == URI("https://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/base/32c39d7106a538e")
-    # end
 
     it "deletes an existing one" do
       client = GContacts::Client.new(:access_token => "12341234")
