@@ -11,5 +11,25 @@
     <gd:fullName>Casey</gd:fullName>
     <gd:givenName>Casey</gd:givenName>
   </gd:name>
-  <gd:email rel='http://schemas.google.com/g/2005#other' address='casey@gmail.com' primary='true'/>
+  <gd:email rel='http://schemas.google.com/g/2005#work' address='casey@gmail.com' primary='true'/>
+  <gd:email rel='http://schemas.google.com/g/2005#home' address='casey.1900@gmail.com'/>
+  <gd:email rel='http://schemas.google.com/g/2005#home' address='casey_case@gmail.com'/>
+  <gd:phoneNumber rel='http://schemas.google.com/g/2005#mobile'>3005004000</gd:phoneNumber>
+  <gd:phoneNumber rel='http://schemas.google.com/g/2005#work'>+130020003000</gd:phoneNumber>
+  <gd:structuredPostalAddress rel='http://schemas.google.com/g/2005#home'>
+    <gd:formattedAddress>Xolo
+      Dome
+      Krypton</gd:formattedAddress>
+    <gd:street>Xolo</gd:street>
+    <gd:city>Dome</gd:city>
+    <gd:region>Krypton</gd:region>
+  </gd:structuredPostalAddress>
+  <gd:structuredPostalAddress rel='http://schemas.google.com/g/2005#work'>
+    <gd:formattedAddress>Nokia Lumia 720
+      Finland
+      Earth</gd:formattedAddress>
+    <gd:street>Nokia Limia 720</gd:street>
+    <gd:city>Finland</gd:city>
+    <gd:region>Earth</gd:region>
+  </gd:structuredPostalAddress>
 </entry>

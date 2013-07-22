@@ -68,7 +68,7 @@ describe GContacts::Element do
       element = GContacts::Element.new(parser.parse(File.read("spec/responses/contacts/get.xml"))["entry"])
       element.update
 
-      parser.parse(element.to_xml).should == {"atom:entry"=>{"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/3a203c8da7ac0a8", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "updated"=>DateTime.parse("2012-04-06T06:02:04+00:00"), "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Casey", "gd:name"=>{"gd:fullName"=>"Casey", "gd:givenName"=>"Casey"}, "gd:email"=>{"@rel"=>"http://schemas.google.com/g/2005#other", "@address"=>"casey@gmail.com", "@primary"=>"true"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"YzllYTBkNmQwOWRlZGY1YWEyYWI5.\""}}
+      parser.parse(element.to_xml).should == {"atom:entry"=>{"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/3a203c8da7ac0a8", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "updated"=>DateTime.parse("2012-04-06T06:02:04+00:00"), "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Casey", "gd:name"=>{"gd:fullName"=>"Casey", "gd:givenName"=>"Casey"}, "gd:email"=>[{"@rel"=>"http://schemas.google.com/g/2005#work", "@address"=>"casey@gmail.com", "@primary"=>"true"}, {"@rel"=>"http://schemas.google.com/g/2005#home", "@address"=>"casey.1900@gmail.com"}, {"@rel"=>"http://schemas.google.com/g/2005#home", "@address"=>"casey_case@gmail.com"}], "gd:phoneNumber"=>["3005004000", "+130020003000"], "gd:structuredPostalAddress"=>[{"gd:formattedAddress"=>"Xolo\n      Dome\n      Krypton", "gd:street"=>"Xolo", "gd:city"=>"Dome", "gd:region"=>"Krypton", "@rel"=>"http://schemas.google.com/g/2005#home"}, {"gd:formattedAddress"=>"Nokia Lumia 720\n      Finland\n      Earth", "gd:street"=>"Nokia Limia 720", "gd:city"=>"Finland", "gd:region"=>"Earth", "@rel"=>"http://schemas.google.com/g/2005#work"}], "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"YzllYTBkNmQwOWRlZGY1YWEyYWI5.\""}}
     end
 
     it "updating an entry serialized and deserialized" do
@@ -76,7 +76,7 @@ describe GContacts::Element do
       element = YAML::load(YAML::dump(element))
       element.update
 
-      parser.parse(element.to_xml).should == {"atom:entry"=>{"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/3a203c8da7ac0a8", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "updated"=>DateTime.parse("2012-04-06T06:02:04+00:00"), "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Casey", "gd:name"=>{"gd:fullName"=>"Casey", "gd:givenName"=>"Casey"}, "gd:email"=>{"@rel"=>"http://schemas.google.com/g/2005#other", "@address"=>"casey@gmail.com", "@primary"=>"true"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"YzllYTBkNmQwOWRlZGY1YWEyYWI5.\""}}
+      parser.parse(element.to_xml).should == {"atom:entry"=>{"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/3a203c8da7ac0a8", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "updated"=>DateTime.parse("2012-04-06T06:02:04+00:00"), "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Casey", "gd:name"=>{"gd:fullName"=>"Casey", "gd:givenName"=>"Casey"}, "gd:email"=>[{"@rel"=>"http://schemas.google.com/g/2005#work", "@address"=>"casey@gmail.com", "@primary"=>"true"}, {"@rel"=>"http://schemas.google.com/g/2005#home", "@address"=>"casey.1900@gmail.com"}, {"@rel"=>"http://schemas.google.com/g/2005#home", "@address"=>"casey_case@gmail.com"}], "gd:phoneNumber"=>["3005004000", "+130020003000"], "gd:structuredPostalAddress"=>[{"gd:formattedAddress"=>"Xolo\n      Dome\n      Krypton", "gd:street"=>"Xolo", "gd:city"=>"Dome", "gd:region"=>"Krypton", "@rel"=>"http://schemas.google.com/g/2005#home"}, {"gd:formattedAddress"=>"Nokia Lumia 720\n      Finland\n      Earth", "gd:street"=>"Nokia Limia 720", "gd:city"=>"Finland", "gd:region"=>"Earth", "@rel"=>"http://schemas.google.com/g/2005#work"}], "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"YzllYTBkNmQwOWRlZGY1YWEyYWI5.\""}}
     end
 
     it "with contacts" do
@@ -118,6 +118,22 @@ describe GContacts::Element do
       end
 
       expected.should have(0).items
+    end
+  end
+
+  context 'Check hashed attributes' do
+    let(:element) {GContacts::Element.new(parser.parse(File.read("spec/responses/contacts/get.xml"))["entry"])}
+
+    it '#hashed_emails' do
+      element.hashed_emails.should == {"work"=>["casey@gmail.com"], "home"=>["casey.1900@gmail.com", "casey_case@gmail.com"]}
+    end
+
+    it '#hashed_addresses' do
+      element.hashed_addresses.should == {"home"=>["Xolo\n      Dome\n      Krypton"], "work"=>["Nokia Lumia 720\n      Finland\n      Earth"]}
+    end
+
+    it '#hashed_phones' do
+      element.hashed_phones.should == {"mobile"=>["3005004000"], "work"=>["+130020003000"]}
     end
   end
 end

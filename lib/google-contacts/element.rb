@@ -2,8 +2,8 @@ require 'net/http'
 
 module GContacts
   class Element
-    attr_accessor :title, :content, :data, :category, :etag, :group_id, :name, :emails, #:emails,
-      :phones, :addresses#, :addresses, :phones
+    attr_accessor :title, :content, :data, :category, :etag, :group_id, :name, :emails,
+      :phones, :addresses, :hashed_addresses, :hashed_emails, :hashed_phones
     attr_reader :id, :edit_uri, :modifier_flag, :updated, :batch, :photo_uri
 
     ##
@@ -14,8 +14,7 @@ module GContacts
       @data = {}
       return unless entry
 
-      @id, @updated, @content, @title, @etag, @name, @emails = entry["id"], entry["updated"], entry["content"], entry["title"], entry["@gd:etag"], entry["gd:name"], entry["gd:email"]
-      # @address = entry["gd:structuredPostalAddress"]
+      @id, @updated, @content, @title, @etag, @name = entry["id"], entry["updated"], entry["content"], entry["title"], entry["@gd:etag"], entry["gd:name"]
 
       @photo_uri = nil
       if entry["category"]
@@ -72,6 +71,27 @@ module GContacts
         end
       end
 
+      @emails = []
+      if entry["gd:email"].is_a?(Array)
+        nodes = entry["gd:email"]
+      elsif !entry["gd:email"].nil?
+        nodes = [entry["gd:email"]]
+      else
+        nodes = []
+      end
+
+      nodes.each do |email|
+        new_email = {}
+        new_email['address'] = email['@address']
+        unless email['@rel'].nil?
+          new_email['type'] = email['@rel']
+        else
+          new_email['type'] = email['@label']
+        end
+
+        @emails << new_email
+      end
+
       @phones = []
       if entry["gd:phoneNumber"].is_a?(Array)
         nodes = entry["gd:phoneNumber"]
@@ -88,32 +108,11 @@ module GContacts
           unless phone.attributes['rel'].nil?
             new_phone['@rel'] = phone.attributes['rel']
           else
-            new_phone['type'] = phone.attributes['label']
+            new_phone['@rel'] = phone.attributes['label']
           end
           @phones << new_phone
         end
       end
-
-      # @emails = []
-      # if entry["gd:email"].is_a?(Array)
-      #   nodes = entry["gd:email"]
-      # elsif !entry["gd:email"].nil?
-      #   nodes = [entry["gd:email"]]
-      # else
-      #   nodes = []
-      # end
-
-      # nodes.each do |email|
-      #   new_email = {}
-      #   new_email['address'] = email['@address']
-      #   unless email['@rel'].nil?
-      #     new_email['type'] = email['@rel']
-      #   else
-      #     new_email['type'] = email['@label']
-      #   end
-
-      #   @emails << new_email
-      # end
 
       @addresses = []
       if entry["gd:structuredPostalAddress"].is_a?(Array)
@@ -135,6 +134,30 @@ module GContacts
 
         @addresses << new_address
       end
+
+      @hashed_emails = {}
+      @emails.each do |email|
+        type = email['type'].split("#").last
+        text = email['address']
+        @hashed_emails.merge!(type => []) unless(@hashed_emails[type])
+        @hashed_emails[type] << text
+      end if @emails.any?
+
+      @hashed_addresses = {}
+      @addresses.each do |address|
+        type = address['type'].split("#").last
+        text = address['gd:formattedAddress']
+        @hashed_addresses.merge!(type => []) unless(@hashed_addresses[type])
+        @hashed_addresses[type] << text
+      end if @addresses.any?
+
+      @hashed_phones = {}
+      @phones.each do |phone|
+        type = phone['@rel'].split("#").last
+        text = phone['text']
+        @hashed_phones.merge!(type => []) unless(@hashed_phones[type])
+        @hashed_phones[type] << text
+      end if @phones.any?
     end
 
     ##
