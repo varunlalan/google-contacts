@@ -3,7 +3,7 @@ require 'net/http'
 module GContacts
   class Element
     attr_accessor :title, :content, :data, :category, :etag, :group_id, :name, :emails,
-      :phones, :addresses, :hashed_addresses, :hashed_emails, :hashed_phones
+      :phones, :addresses, :hashed_addresses, :hashed_email_addresses, :hashed_phone_numbers
     attr_reader :id, :edit_uri, :modifier_flag, :updated, :batch, :photo_uri
 
     ##
@@ -135,12 +135,12 @@ module GContacts
         @addresses << new_address
       end
 
-      @hashed_emails = {}
+      @hashed_email_addresses = {}
       @emails.each do |email|
         type = email['type'].split("#").last
         text = email['address']
-        @hashed_emails.merge!(type => []) unless(@hashed_emails[type])
-        @hashed_emails[type] << text
+        @hashed_email_addresses.merge!(type => []) unless(@hashed_email_addresses[type])
+        @hashed_email_addresses[type] << text
       end if @emails.any?
 
       @hashed_addresses = {}
@@ -151,12 +151,12 @@ module GContacts
         @hashed_addresses[type] << text
       end if @addresses.any?
 
-      @hashed_phones = {}
+      @hashed_phone_numbers = {}
       @phones.each do |phone|
         type = phone['@rel'].split("#").last
         text = phone['text']
-        @hashed_phones.merge!(type => []) unless(@hashed_phones[type])
-        @hashed_phones[type] << text
+        @hashed_phone_numbers.merge!(type => []) unless(@hashed_phone_numbers[type])
+        @hashed_phone_numbers[type] << text
       end if @phones.any?
     end
 
