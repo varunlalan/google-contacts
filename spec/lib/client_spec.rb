@@ -233,7 +233,7 @@ describe GContacts::Client do
           uri.should == "/m8/feeds/contacts/default/full/batch"
           headers.should include("Authorization" => "Bearer 12341234")
 
-          parser.parse(data).should == {"feed"=>{"atom:entry"=>{"batch:id"=>"create", "batch:operation"=>{"@type"=>"insert"}, "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "updated"=>DateTime.parse("2012-04-06T06:02:04+00:00"), "atom:content"=>"Bar Foo", "atom:title"=>"foo bar", "gd:name"=>{"gd:givenName"=>"foo bar"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008"}, "@xmlns"=>"http://www.w3.org/2005/Atom", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:batch"=>"http://schemas.google.com/gdata/batch"}}
+          parser.parse(data).should == {"feed"=>{"atom:entry"=>{"batch:id"=>"create", "batch:operation"=>{"@type"=>"insert"}, "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "atom:content"=>"Bar Foo", "atom:title"=>"foo bar", "gd:name"=>{"gd:givenName"=>"foo bar"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008"}, "@xmlns"=>"http://www.w3.org/2005/Atom", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:batch"=>"http://schemas.google.com/gdata/batch"}}
 
           res_mock
         end
@@ -263,7 +263,7 @@ describe GContacts::Client do
           uri.should == "/m8/feeds/contacts/default/full/batch"
           headers.should include("Authorization" => "Bearer 12341234")
 
-          parser.parse(data).should == {"feed"=>{"atom:entry"=>{"batch:id"=>"create", "batch:operation"=>{"@type"=>"insert"}, "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "updated"=>DateTime.parse("2012-04-06T06:02:04+00:00"), "atom:content"=>"Bar Foo", "atom:title"=>"foo bar", "gd:name"=>{"gd:givenName"=>"foo bar"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008"}, "@xmlns"=>"http://www.w3.org/2005/Atom", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:batch"=>"http://schemas.google.com/gdata/batch"}}
+          parser.parse(data).should == {"feed"=>{"atom:entry"=>{"batch:id"=>"create", "batch:operation"=>{"@type"=>"insert"}, "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "atom:content"=>"Bar Foo", "atom:title"=>"foo bar", "gd:name"=>{"gd:givenName"=>"foo bar"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008"}, "@xmlns"=>"http://www.w3.org/2005/Atom", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:batch"=>"http://schemas.google.com/gdata/batch"}}
 
           res_mock
         end
@@ -429,7 +429,7 @@ describe GContacts::Client do
           uri.should == "/m8/feeds/groups/default/full/batch"
           headers.should include("Authorization" => "Bearer 12341234")
 
-          parser.parse(data).should == {"feed"=>{"atom:entry"=>{"batch:id"=>"create", "batch:operation"=>{"@type"=>"insert"}, "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#group"}, "updated"=>DateTime.parse("2012-04-06T06:02:04+00:00"), "atom:content"=>"Bar Foo", "atom:title"=>"foo bar", "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008"}, "@xmlns"=>"http://www.w3.org/2005/Atom", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:batch"=>"http://schemas.google.com/gdata/batch"}}
+          parser.parse(data).should == {"feed"=>{"atom:entry"=>{"batch:id"=>"create", "batch:operation"=>{"@type"=>"insert"}, "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#group"},  "atom:content"=>"Bar Foo", "atom:title"=>"foo bar", "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008"}, "@xmlns"=>"http://www.w3.org/2005/Atom", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:batch"=>"http://schemas.google.com/gdata/batch"}}
 
           res_mock
         end
@@ -456,7 +456,7 @@ describe GContacts::Client do
           uri.should == "/m8/feeds/groups/default/full/batch"
           headers.should include("Authorization" => "Bearer 12341234")
 
-          parser.parse(data).should == {"feed"=>{"atom:entry"=>{"batch:id"=>"create", "batch:operation"=>{"@type"=>"insert"}, "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#group"}, "updated"=>DateTime.parse("2012-04-06T06:02:04+00:00"), "atom:content"=>{"@type"=>"text"}, "atom:title"=>nil, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008"}, "@xmlns"=>"http://www.w3.org/2005/Atom", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:batch"=>"http://schemas.google.com/gdata/batch"}}
+          parser.parse(data).should == {"feed"=>{"atom:entry"=>{"batch:id"=>"create", "batch:operation"=>{"@type"=>"insert"}, "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#group"}, "atom:content"=>{"@type"=>"text"}, "atom:title"=>nil, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008"}, "@xmlns"=>"http://www.w3.org/2005/Atom", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:batch"=>"http://schemas.google.com/gdata/batch"}}
 
           res_mock
         end
