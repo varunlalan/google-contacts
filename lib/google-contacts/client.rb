@@ -204,7 +204,7 @@ module GContacts
       uri = API_URI["#{element.category}s".to_sym]
       raise InvalidKind, "Unsupported kind #{element.category}" unless uri
 
-      http_request(:delete, URI(uri[:get] % [:base, File.basename(element.id)]), :headers => {"Content-Type" => "application/atom+xml", "If-Match" => element.etag})
+      http_request(:delete, URI(uri[:update] % [:base, File.basename(element.id)]), :headers => {"Content-Type" => "application/atom+xml", "If-Match" => element.etag})
 
       true
     end
