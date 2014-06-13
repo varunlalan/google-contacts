@@ -64,8 +64,7 @@ module GContacts
       if (groups = [entry["gContact:groupMembershipInfo"]])
         groups.flatten.compact.each do |group|
           @modifier_flag = :delete if group["@deleted"] == "true"
-          href = group["@href"]
-          @groups << { group_id: href.split('/').pop, group_href: href }
+          @groups << { group_id: group["@href"].split('/').pop, group_href: group["@href"] }
         end
       end
 
