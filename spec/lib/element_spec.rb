@@ -136,4 +136,16 @@ describe GContacts::Element do
       element.hashed_phone_numbers.should == {"mobile"=>["3005004000"], "work"=>["+130020003000"]}
     end
   end
+
+  context 'Aggregate Contact groups' do
+    let(:element) { GContacts::Element.new(parser.parse(File.read("spec/responses/contacts/multiple_group.xml"))["entry"]) }
+    let(:group)   { element.groups }
+
+    it '#groups' do
+      group.count.should == 2
+      group.map{ |g| g[:group_href] }.should_not be_empty
+      group.map{ |g| g[:group_id] }.should_not be_empty
+      group.map{ |g| g[:group_id] }.should include('6', '3d55e0800e9fe827')
+    end
+  end
 end

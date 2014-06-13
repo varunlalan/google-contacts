@@ -2,7 +2,7 @@ require 'net/http'
 
 module GContacts
   class Element
-    attr_accessor :title, :content, :data, :category, :etag, :group_id, :name, :emails,
+    attr_accessor :title, :content, :data, :category, :etag, :groups, :group_id, :name, :emails,
       :phones, :addresses, :hashed_addresses, :hashed_email_addresses, :hashed_phone_numbers
     attr_reader :id, :edit_uri, :modifier_flag, :updated, :batch, :photo_uri
 
@@ -58,6 +58,15 @@ module GContacts
       if entry["gContact:groupMembershipInfo"].is_a?(Hash)
         @modifier_flag = :delete if entry["gContact:groupMembershipInfo"]["@deleted"] == "true"
         @group_id = entry["gContact:groupMembershipInfo"]["@href"]
+      end
+
+      @groups = []
+      if (groups = [entry["gContact:groupMembershipInfo"]])
+        groups.flatten.compact.each do |group|
+          @modifier_flag = :delete if group["@deleted"] == "true"
+          href = group["@href"]
+          @groups << { group_id: href.split('/').pop, group_href: href }
+        end
       end
 
       # Need to know where to send the update request

@@ -205,7 +205,7 @@ describe GContacts::Client do
 
       mock_response(File.read("spec/responses/contacts/update.xml")) do |http_mock, res_mock|
         http_mock.should_receive(:request) do |request|
-          request.path.should == "/m8/feeds/contacts/default/base/32c39d7106a538e"
+          request.path.should == "/m8/feeds/contacts/default/full/32c39d7106a538e"
           request.to_hash["if-match"].should == [element.etag]
           request.to_hash["authorization"].should == ["Bearer 12341234"]
 
@@ -402,7 +402,7 @@ describe GContacts::Client do
 
       mock_response(File.read("spec/responses/groups/update.xml")) do |http_mock, res_mock|
         http_mock.should_receive(:request) do |request|
-          request.path.should == "/m8/feeds/groups/default/base/3f93e3738e811d63"
+          request.path.should == "/m8/feeds/groups/default/full/3f93e3738e811d63"
           request.to_hash["if-match"].should == [element.etag]
           request.to_hash["authorization"].should == ["Bearer 12341234"]
 
