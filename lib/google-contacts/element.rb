@@ -237,6 +237,21 @@ module GContacts
 
     alias to_s inspect
 
+
+    # Update group list
+    # usage : element.update_groups(list_of_group_ids)
+    #
+    def update_groups(*group_links)
+      data.delete('gContact:groupMembershipInfo')
+      return unless group_links.empty?
+
+      data.merge!({ 'gContact:groupMembershipInfo' => [] })
+      group_links.each do |group_link|
+        params = { '@deleted' => 'false', '@href' => group_link.to_s }
+        data['gContact:groupMembershipInfo'] << params
+      end
+    end
+
     private
     # Evil ahead
       def handle_data(tag, data, indent)

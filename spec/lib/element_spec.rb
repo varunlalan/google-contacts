@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe GContacts::Element do
+  include Support::ResponseMock
+
   let(:parser) { Nori.new }
 
   it "changes modifier flags" do
@@ -146,6 +148,22 @@ describe GContacts::Element do
       group.map{ |g| g[:group_href] }.should_not be_empty
       group.map{ |g| g[:group_id] }.should_not be_empty
       group.map{ |g| g[:group_id] }.should include('6', '3d55e0800e9fe827')
+    end
+  end
+
+  context '#update_groups updates Contact groups' do
+    let(:element)         { GContacts::Element.new(parser.parse(File.read("spec/responses/contacts/multiple_group.xml"))["entry"]) }
+    let(:new_group)       { 'http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/12dsd121as52' }
+    let(:updated_element) { parser.parse(File.read("spec/responses/contacts/update_with_group.xml"))["entry"] }
+
+    it 'should remove old groups from a contact' do
+      element.should_receive(:update_groups).with(new_group).once.and_return(updated_element)
+      result = element.update_groups(new_group)
+
+      element.groups.count.should == 2
+      result['gContact:groupMembershipInfo'].should_not be_nil
+      result['gContact:groupMembershipInfo']['@deleted'].should == 'false'
+      result['gContact:groupMembershipInfo']['@href'].should match(new_group)
     end
   end
 end
