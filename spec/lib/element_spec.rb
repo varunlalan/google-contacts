@@ -156,11 +156,22 @@ describe GContacts::Element do
     let(:new_group)       { 'http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/12dsd121as52' }
     let(:updated_element) { parser.parse(File.read("spec/responses/contacts/update_with_group.xml"))["entry"] }
 
+    it 'should return nil if args is empty' do
+      element.update_groups().should be_nil
+    end
+
     it 'should remove old groups from a contact' do
+      element.groups.count.should == 2
       element.should_receive(:update_groups).with(new_group).once.and_return(updated_element)
       result = element.update_groups(new_group)
 
-      element.groups.count.should == 2
+      result['gContact:groupMembershipInfo']['@href'].should_not match(/3d55e0800e9fe827/)
+    end
+
+    it 'should update with new groups' do
+      element.should_receive(:update_groups).with(new_group).once.and_return(updated_element)
+      result = element.update_groups(new_group)
+
       result['gContact:groupMembershipInfo'].should_not be_nil
       result['gContact:groupMembershipInfo']['@deleted'].should == 'false'
       result['gContact:groupMembershipInfo']['@href'].should match(new_group)

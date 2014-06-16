@@ -243,7 +243,7 @@ module GContacts
     #
     def update_groups(*group_links)
       data.delete('gContact:groupMembershipInfo')
-      return unless group_links.empty?
+      return if group_links.empty?
 
       data.merge!({ 'gContact:groupMembershipInfo' => [] })
       group_links.each do |group_link|
