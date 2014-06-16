@@ -246,7 +246,7 @@ module GContacts
       return if group_links.empty?
 
       data.merge!({ 'gContact:groupMembershipInfo' => [] })
-      group_links.each do |group_link|
+      group_links.flatten.each do |group_link|
         params = { '@deleted' => 'false', '@href' => group_link.to_s }
         data['gContact:groupMembershipInfo'] << params
       end
