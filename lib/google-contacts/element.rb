@@ -55,11 +55,6 @@ module GContacts
         end
       end
 
-      if entry["gContact:groupMembershipInfo"].is_a?(Hash)
-        @modifier_flag = :delete if entry["gContact:groupMembershipInfo"]["@deleted"] == "true"
-        @group_id = entry["gContact:groupMembershipInfo"]["@href"]
-      end
-
       @groups = []
       if (groups = [entry["gContact:groupMembershipInfo"]])
         groups.flatten.compact.each do |group|
@@ -243,10 +238,11 @@ module GContacts
     #
     def update_groups(*group_links)
       data.delete('gContact:groupMembershipInfo')
+      group_links = group_links.flatten
       return if group_links.empty?
 
       data.merge!({ 'gContact:groupMembershipInfo' => [] })
-      group_links.flatten.each do |group_link|
+      group_links.each do |group_link|
         params = { '@deleted' => 'false', '@href' => group_link.to_s }
         data['gContact:groupMembershipInfo'] << params
       end
