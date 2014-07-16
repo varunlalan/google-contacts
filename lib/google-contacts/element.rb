@@ -184,7 +184,7 @@ module GContacts
 
       unless @modifier_flag == :delete
         xml << "  <atom:category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/g/2008##{@category}'/>\n"
-        xml << "  <atom:content type='text'>#{CGI::escapeHTML(@content)}</atom:content>\n"
+        xml << "  <atom:content type='text'>#{CGI::escapeHTML(@content || '')}</atom:content>\n"
         xml << "  <atom:title>#{@title}</atom:title>\n"
         xml << "  <gContact:groupMembershipInfo deleted='false' href='#{@group_id}'/>\n" if @group_id
 
