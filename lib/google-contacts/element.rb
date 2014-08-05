@@ -271,7 +271,7 @@ module GContacts
 
       def organize_birthdays(primary_birthday)
         primary_birthday.blank? && return
-        @birthday = { date: primary_birthday.first['@when'] }
+        @birthday = primary_birthday.first['@when']
       end
 
       def organization_details

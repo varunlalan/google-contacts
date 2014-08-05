@@ -204,8 +204,8 @@ describe GContacts::Element do
 
       it 'should return birthday of a contact' do
         element.birthday.should_not be_nil
-        element.birthday.class.should == Hash
-        element.birthday.should == { date: '1989-09-10' }
+        element.birthday.class.should == String
+        element.birthday.should == '1989-09-10'
       end
 
       it 'should return NIL if no birthday is specified' do
