@@ -85,13 +85,13 @@ describe GContacts::Element do
       elements = GContacts::List.new(parser.parse(File.read("spec/responses/contacts/all.xml")))
 
       expected = [
-        {"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/fd8fb1a55f2916e", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Steve Stephson", "gContact:groupMembershipInfo"=>[{"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}, {"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}], "gd:name"=>{"gd:fullName"=>"Steve Stephson", "gd:givenName"=>"Steve", "gd:familyName"=>"Stephson"}, "gd:email"=>[{"@rel"=>"http://schemas.google.com/g/2005#other", "@address"=>"steve.stephson@gmail.com", "@primary"=>"true"}, {"@rel"=>"http://schemas.google.com/g/2005#other", "@address"=>"steve@gmail.com"}], "gd:phoneNumber"=>["3005004000", "+130020003000"], "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"OWUxNWM4MTEzZjEyZTVjZTQ1Mjgy.\""},
+        {"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/fd8fb1a55f2916e", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Steve Stephson", "gd:name"=>{"gd:fullName"=>"Steve Stephson", "gd:givenName"=>"Steve", "gd:familyName"=>"Stephson"}, "gd:email"=>[{"@rel"=>"http://schemas.google.com/g/2005#other", "@address"=>"steve.stephson@gmail.com", "@primary"=>"true"}, {"@rel"=>"http://schemas.google.com/g/2005#other", "@address"=>"steve@gmail.com"}], "gd:phoneNumber"=>["3005004000", "+130020003000"],  "gContact:groupMembershipInfo"=>{"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"OWUxNWM4MTEzZjEyZTVjZTQ1Mjgy.\""},
 
         {"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/894bc75ebb5187d", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Jill Doe", "gd:name"=>{"gd:fullName"=>"Jill Doe", "gd:givenName"=>"Jill", "gd:familyName"=>"Doe"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"ZGRhYjVhMTNkMmFhNzJjMzEyY2Ux.\""},
 
-        {"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/cd046ed518f0fb0", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Dave \"Terry\" Pratchett", "gContact:groupMembershipInfo"=>[{"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}, {"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}], "gd:name"=>{"gd:fullName"=>"Dave \"Terry\" Pratchett", "gd:givenName"=>"Dave", "gd:additionalName"=>"\"Terry\"", "gd:familyName"=>"Pratchett"}, "gd:organization"=>{"gd:orgName"=>"Foo Bar Inc", "@rel"=>"http://schemas.google.com/g/2005#work"}, "gd:email"=>{"@rel"=>"http://schemas.google.com/g/2005#home", "@address"=>"dave.pratchett@gmail.com", "@primary"=>"true"}, "gd:phoneNumber"=>"7003002000", "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"ZWVhMDQ0MWI0MWM0YTJkM2MzY2Zh.\""},
+        {"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/cd046ed518f0fb0", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Dave \"Terry\" Pratchett", "gd:name"=>{"gd:fullName"=>"Dave \"Terry\" Pratchett", "gd:givenName"=>"Dave", "gd:additionalName"=>"\"Terry\"", "gd:familyName"=>"Pratchett"}, "gd:organization"=>{"gd:orgName"=>"Foo Bar Inc", "@rel"=>"http://schemas.google.com/g/2005#work"}, "gd:email"=>{"@rel"=>"http://schemas.google.com/g/2005#home", "@address"=>"dave.pratchett@gmail.com", "@primary"=>"true"}, "gd:phoneNumber"=>"7003002000", "gContact:groupMembershipInfo"=>{"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"ZWVhMDQ0MWI0MWM0YTJkM2MzY2Zh.\""},
 
-        {"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/a1941d3d13cdc66", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Jane Doe", "gContact:groupMembershipInfo"=>[{"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}, {"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}], "gd:name"=>{"gd:fullName"=>"Jane Doe", "gd:givenName"=>"Jane", "gd:familyName"=>"Doe"}, "gd:email"=>{"@rel"=>"http://schemas.google.com/g/2005#home", "@address"=>"jane.doe@gmail.com", "@primary"=>"true"}, "gd:phoneNumber"=>"16004003000", "gd:structuredPostalAddress"=>{"gd:formattedAddress"=>"5 Market St\n        San Francisco\n        CA", "gd:street"=>"5 Market St", "gd:city"=>"San Francisco", "gd:region"=>"CA", "@rel"=>"http://schemas.google.com/g/2005#home"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"Yzg3MTNiODJlMTRlZjZjN2EyOGRm.\""}
+        {"id"=>"http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/full/a1941d3d13cdc66", "atom:category"=>{"@scheme"=>"http://schemas.google.com/g/2005#kind", "@term"=>"http://schemas.google.com/g/2008#contact"}, "atom:content"=>{"@type"=>"text"}, "atom:title"=>"Jane Doe", "gd:name"=>{"gd:fullName"=>"Jane Doe", "gd:givenName"=>"Jane", "gd:familyName"=>"Doe"}, "gd:email"=>{"@rel"=>"http://schemas.google.com/g/2005#home", "@address"=>"jane.doe@gmail.com", "@primary"=>"true"}, "gd:phoneNumber"=>"16004003000", "gd:structuredPostalAddress"=>{"gd:formattedAddress"=>"5 Market St\n        San Francisco\n        CA", "gd:street"=>"5 Market St", "gd:city"=>"San Francisco", "gd:region"=>"CA", "@rel"=>"http://schemas.google.com/g/2005#home"}, "gContact:groupMembershipInfo"=>{"@deleted"=>"false", "@href"=>"http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/6"}, "@xmlns:atom"=>"http://www.w3.org/2005/Atom", "@xmlns:gd"=>"http://schemas.google.com/g/2005", "@xmlns:gContact"=>"http://schemas.google.com/contact/2008", "@gd:etag"=>"\"Yzg3MTNiODJlMTRlZjZjN2EyOGRm.\""}
       ]
 
       elements.each do |element|
@@ -99,6 +99,7 @@ describe GContacts::Element do
 
         # The extra tags around this are to ensure the test works in JRuby which has a stricter parser
         # and requires the presence of the xlns:#### tags to properly extract data. This isn't an issue with LibXML.
+
         parser.parse("<feed xmlns='http://www.w3.org/2005/Atom' xmlns:gContact='http://schemas.google.com/contact/2008' xmlns:gd='http://schemas.google.com/g/2005' xmlns:batch='http://schemas.google.com/gdata/batch'>#{element.to_xml}</feed>")["feed"]["atom:entry"].should == expected.shift
       end
 
@@ -175,6 +176,91 @@ describe GContacts::Element do
       result['gContact:groupMembershipInfo'].should_not be_nil
       result['gContact:groupMembershipInfo']['@deleted'].should == 'false'
       result['gContact:groupMembershipInfo']['@href'].should match(new_group)
+    end
+  end
+
+  context 'Other attributes' do
+    let(:element) { GContacts::Element.new(parser.parse(File.read("spec/responses/contacts/contact_with_all_data.xml"))["entry"]) }
+
+    context '#data should contain other attributes' do
+      let!(:data) { element.data }
+
+      it '#birthday' do
+        data['gContact:birthday'].should_not be_empty
+        data['gContact:birthday'][0].keys.should include("@when")
+        data['gContact:birthday'].should include({"@when"=>"1989-09-10"})
+      end
+
+      it '#organisation' do
+        data['gd:organization'].should_not be_empty
+        data['gd:organization'][0].keys.should include('gd:orgName', 'gd:orgTitle')
+      end
+    end
+
+    context '#birthday' do
+      it 'GContacts::Element should have method called birthday' do
+        lambda { element.birthday }.should_not raise_error
+      end
+
+      it 'should return birthday of a contact' do
+        element.birthday.should_not be_nil
+        element.birthday.class.should == Hash
+        element.birthday.should == { date: '1989-09-10' }
+      end
+
+      it 'should return NIL if no birthday is specified' do
+        element = GContacts::Element.new
+        element.birthday.should be_nil
+      end
+    end
+
+    context '#organization' do
+      it 'GContacts::Element should have method called organization' do
+        lambda { element.organization }.should_not raise_error
+      end
+
+      it 'should return organization data of a contact' do
+        element.organization.should_not be_nil
+        element.organization.class.should == Hash
+        element.organization.keys.should include('gd:orgName', 'gd:orgTitle')
+      end
+
+      it 'should return NIL if no organization is specified' do
+        element = GContacts::Element.new
+        element.organization.should be_nil
+      end
+    end
+
+    context '#org_name' do
+      it 'GContacts::Element should have method called org_name' do
+        lambda { element.org_name }.should_not raise_error
+      end
+
+      it 'should return organization data of a contact' do
+        element.org_name.should_not be_nil
+        element.org_name.should =~ /Organisation/
+      end
+
+      it 'should return NIL if no organization is specified' do
+        element = GContacts::Element.new
+        element.org_name.should be_nil
+      end
+    end
+
+    context '#org_title' do
+      it 'GContacts::Element should have method called org_title' do
+        lambda { element.org_title }.should_not raise_error
+      end
+
+      it 'should return organization title of a contact' do
+        element.org_title.should_not be_nil
+        element.org_title.should =~ /Developer/
+      end
+
+      it 'should return NIL if no orgTitle is specified' do
+        element = GContacts::Element.new
+        element.org_title.should be_nil
+      end
     end
   end
 end

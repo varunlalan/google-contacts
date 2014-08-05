@@ -2,9 +2,10 @@ require 'net/http'
 
 module GContacts
   class Element
-    attr_accessor :title, :content, :data, :category, :etag, :groups, :group_id, :name, :emails,
-      :phones, :addresses, :hashed_addresses, :hashed_email_addresses, :hashed_phone_numbers
-    attr_reader :id, :edit_uri, :modifier_flag, :updated, :batch, :photo_uri
+    attr_accessor :addresses, :birthday, :content, :data, :category, :emails, :etag, :groups,
+      :group_id, :hashed_addresses, :hashed_email_addresses, :hashed_phone_numbers,
+      :name, :organization, :org_name, :org_title, :phones, :title
+    attr_reader :batch, :edit_uri, :id, :modifier_flag, :photo_uri, :updated
 
     ##
     # Creates a new element by parsing the returned entry from Google
@@ -15,6 +16,7 @@ module GContacts
       return unless entry
 
       @id, @updated, @content, @title, @etag, @name = entry["id"], entry["updated"], entry["content"], entry["title"], entry["@gd:etag"], entry["gd:name"]
+      @organization = entry['gd:organization']
 
       @photo_uri = nil
       if entry["category"]
@@ -161,6 +163,10 @@ module GContacts
         @hashed_phone_numbers.merge!(type => []) unless(@hashed_phone_numbers[type])
         @hashed_phone_numbers[type] << text
       end if @phones.any?
+
+      @birthday = {}
+      organize_birthdays(@data['gContact:birthday'])
+      organization_details
     end
 
     ##
@@ -249,6 +255,11 @@ module GContacts
     end
 
     private
+      def organize_birthdays(primary_birthday)
+        primary_birthday.blank? && return
+        @birthday = { date: primary_birthday.first['@when'] }
+      end
+
     # Evil ahead
       def handle_data(tag, data, indent)
         if data.is_a?(Array)
@@ -261,6 +272,26 @@ module GContacts
         end
 
         xml
+      end
+
+      def organization_details
+        @organization.blank? && return
+
+        @org_name  = @organization['gd:orgName']
+        @org_title = @organization['gd:orgTitle']
+      end
+
+      def parse_element(unparsed)
+        data = {}
+
+        if unparsed.is_a?(Hash)
+          data = unparsed
+        elsif unparsed.is_a?(Nori::StringWithAttributes)
+          data["text"] = unparsed.to_s
+          unparsed.attributes.each {|k, v| data["@#{k}"] = v}
+        end
+
+        data
       end
 
       def write_tag(tag, data, indent)
@@ -310,19 +341,6 @@ module GContacts
 
         xml << " " * indent
         xml << "</#{tag}>\n"
-      end
-
-      def parse_element(unparsed)
-        data = {}
-
-        if unparsed.is_a?(Hash)
-          data = unparsed
-        elsif unparsed.is_a?(Nori::StringWithAttributes)
-          data["text"] = unparsed.to_s
-          unparsed.attributes.each {|k, v| data["@#{k}"] = v}
-        end
-
-        data
       end
   end
 end

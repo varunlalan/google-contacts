@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<entry xmlns='http://www.w3.org/2005/Atom' xmlns:gContact='http://schemas.google.com/contact/2008' xmlns:batch='http://schemas.google.com/gdata/batch' xmlns:gd='http://schemas.google.com/g/2005' gd:etag='&quot;YzllYTBkNmQwOWRlZGY1YWEyYWI5.&quot;'>
+  <id>http://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/base/3a203c8da7ac0a8</id>
+  <updated>2011-07-08T22:45:48.119Z</updated>
+  <app:edited xmlns:app='http://www.w3.org/2007/app'>2011-07-08T22:45:48.119Z</app:edited>
+  <title>Casey</title>
+  <link rel='self' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/base/3a203c8da7ac0a8'/>
+  <link rel='edit' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/john.doe%40gmail.com/base/3a203c8da7ac0a8'/>
+  <gd:name>
+    <gd:fullName>Casey</gd:fullName>
+    <gd:givenName>Casey</gd:givenName>
+  </gd:name>
+  <gd:email rel='http://schemas.google.com/g/2005#work' address='casey@gmail.com' primary='true'/>
+  <gd:email rel='http://schemas.google.com/g/2005#home' address='casey.1900@gmail.com'/>
+  <gd:email rel='http://schemas.google.com/g/2005#home' address='casey_case@gmail.com'/>
+  <gd:phoneNumber rel='http://schemas.google.com/g/2005#mobile'>3005004000</gd:phoneNumber>
+  <gd:phoneNumber rel='http://schemas.google.com/g/2005#work'>+130020003000</gd:phoneNumber>
+  <gd:organization rel='http://schemas.google.com/g/2005#other'>
+    <gd:orgName>
+      Organisation
+    </gd:orgName>
+    <gd:orgTitle>
+      Developer
+    </gd:orgTitle>
+  </gd:organization>
+  <gContact:birthday when='1989-09-10'/> <!-- Format is YYYY-MM-DD -->
+  <gContact:event label='Birthday'>
+    <gd:when startTime='1989-07-09'/>
+  </gContact:event>
+  <gContact:groupMembershipInfo deleted='false' href='http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/12dsd121as52'/>
+</entry>
