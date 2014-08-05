@@ -255,12 +255,7 @@ module GContacts
     end
 
     private
-      def organize_birthdays(primary_birthday)
-        primary_birthday.blank? && return
-        @birthday = { date: primary_birthday.first['@when'] }
-      end
-
-    # Evil ahead
+     # Evil ahead
       def handle_data(tag, data, indent)
         if data.is_a?(Array)
           xml = ""
@@ -272,6 +267,11 @@ module GContacts
         end
 
         xml
+      end
+
+      def organize_birthdays(primary_birthday)
+        primary_birthday.blank? && return
+        @birthday = { date: primary_birthday.first['@when'] }
       end
 
       def organization_details
