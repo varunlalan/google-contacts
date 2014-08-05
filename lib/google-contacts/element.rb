@@ -164,7 +164,6 @@ module GContacts
         @hashed_phone_numbers[type] << text
       end if @phones.any?
 
-      @birthday = {}
       organize_birthdays(@data['gContact:birthday'])
       organization_details
     end
