@@ -10,11 +10,6 @@
     <gd:fullName>Casey</gd:fullName>
     <gd:givenName>Casey</gd:givenName>
   </gd:name>
-  <gd:email rel='http://schemas.google.com/g/2005#work' address='casey@gmail.com' primary='true'/>
-  <gd:email rel='http://schemas.google.com/g/2005#home' address='casey.1900@gmail.com'/>
-  <gd:email rel='http://schemas.google.com/g/2005#home' address='casey_case@gmail.com'/>
-  <gd:phoneNumber rel='http://schemas.google.com/g/2005#mobile'>3005004000</gd:phoneNumber>
-  <gd:phoneNumber rel='http://schemas.google.com/g/2005#work'>+130020003000</gd:phoneNumber>
   <gd:organization rel='http://schemas.google.com/g/2005#other'>
     <gd:orgName>
       Organisation
@@ -23,9 +18,35 @@
       Developer
     </gd:orgTitle>
   </gd:organization>
+  <gd:email rel='http://schemas.google.com/g/2005#work' address='casey@gmail.com' primary='true'/>
+  <gd:email rel='http://schemas.google.com/g/2005#home' address='casey.1900@gmail.com'/>
+  <gd:email rel='http://schemas.google.com/g/2005#home' address='casey_case@gmail.com'/>
+  <gd:phoneNumber rel='http://schemas.google.com/g/2005#mobile'>3005004000</gd:phoneNumber>
+  <gd:phoneNumber rel='http://schemas.google.com/g/2005#work'>+130020003000</gd:phoneNumber>
+  <gd:structuredPostalAddress rel='http://schemas.google.com/g/2005#home'>
+    <gd:formattedAddress>Xolo
+      Dome
+      Krypton</gd:formattedAddress>
+    <gd:street>Xolo</gd:street>
+    <gd:city>Dome</gd:city>
+    <gd:region>Krypton</gd:region>
+  </gd:structuredPostalAddress>
+  <gd:structuredPostalAddress rel='http://schemas.google.com/g/2005#work'>
+    <gd:formattedAddress>Nokia Lumia 720
+      Finland
+      Earth</gd:formattedAddress>
+    <gd:street>Nokia Limia 720</gd:street>
+    <gd:city>Finland</gd:city>
+    <gd:region>Earth</gd:region>
+  </gd:structuredPostalAddress>
   <gContact:birthday when='1989-09-10'/> <!-- Format is YYYY-MM-DD -->
   <gContact:event label='Birthday'>
     <gd:when startTime='1989-07-09'/>
   </gContact:event>
+  <gContact:website href="example.profile.com" rel="profile"/>
+  <gContact:website href="example.wordpress.com" rel="blog"/>
+  <gContact:website href="custom.com" label="Custom"/>
+  <gContact:website href="homepage.wordpress.com" rel="home-page"/>
+  <gContact:website href="example.work.com" rel="work"/>
   <gContact:groupMembershipInfo deleted='false' href='http://www.google.com/m8/feeds/groups/john.doe%40gmail.com/base/12dsd121as52'/>
 </entry>

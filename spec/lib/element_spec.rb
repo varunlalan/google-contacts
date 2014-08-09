@@ -125,7 +125,7 @@ describe GContacts::Element do
   end
 
   context 'Check hashed attributes' do
-    let(:element) {GContacts::Element.new(parser.parse(File.read("spec/responses/contacts/get.xml"))["entry"])}
+    let(:element) {GContacts::Element.new(parser.parse(File.read("spec/responses/contacts/contact_with_all_data.xml"))["entry"])}
 
     it '#hashed_email_addresses' do
       element.hashed_email_addresses.should == {"work"=>["casey@gmail.com"], "home"=>["casey.1900@gmail.com", "casey_case@gmail.com"]}
@@ -137,6 +137,12 @@ describe GContacts::Element do
 
     it '#hashed_phone_numbers' do
       element.hashed_phone_numbers.should == {"mobile"=>["3005004000"], "work"=>["+130020003000"]}
+    end
+
+    it '#hashed_websites' do
+      element.hashed_websites.should == { "profile"=>["example.profile.com"], "blog"=>["example.wordpress.com"],
+        "Custom"=>["custom.com"], "home-page"=>["homepage.wordpress.com"], "work"=>["example.work.com"] }
+      element.hashed_websites.keys.should == ['profile', 'blog', 'Custom', 'home-page', 'work']
     end
   end
 
@@ -194,6 +200,11 @@ describe GContacts::Element do
       it '#organisation' do
         data['gd:organization'].should_not be_empty
         data['gd:organization'][0].keys.should include('gd:orgName', 'gd:orgTitle')
+      end
+
+      it '#websites' do
+        data['gContact:website'].should_not be_empty
+        data['gContact:website'][0].keys.should include('@href', '@rel')
       end
     end
 
@@ -260,6 +271,26 @@ describe GContacts::Element do
       it 'should return NIL if no orgTitle is specified' do
         element = GContacts::Element.new
         element.org_title.should be_nil
+      end
+    end
+
+    context '#websites' do
+      it 'GContacts::Element should have method called websites' do
+        lambda { element.websites }.should_not raise_error
+      end
+
+      it 'should return websites of a contact' do
+        websites = element.websites.map { |w| w['gContact:website'] }
+
+        element.websites.should_not be_empty
+        websites.should_not be_empty
+        websites.should include('example.profile.com', 'example.wordpress.com',
+          'custom.com', 'homepage.wordpress.com', 'example.work.com')
+      end
+
+      it 'should return empty array if no website is specified' do
+        element = GContacts::Element.new
+        element.websites.should be_nil
       end
     end
   end

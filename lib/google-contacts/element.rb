@@ -4,7 +4,8 @@ module GContacts
   class Element
     attr_accessor :addresses, :birthday, :content, :data, :category, :emails, :etag, :groups,
       :group_id, :hashed_addresses, :hashed_email_addresses, :hashed_phone_numbers,
-      :name, :organization, :org_name, :org_title, :phones, :title
+      :hashed_websites, :name, :organization, :org_name, :org_title, :phones, :title,
+      :websites
     attr_reader :batch, :edit_uri, :id, :modifier_flag, :photo_uri, :updated
 
     ##
@@ -164,6 +165,23 @@ module GContacts
         @hashed_phone_numbers[type] << text
       end if @phones.any?
 
+      @websites = []
+      if entry["gContact:website"].is_a?(Array)
+        nodes = entry["gContact:website"]
+      elsif !entry["gContact:website"].nil?
+        nodes = [entry["gContact:website"]]
+      else
+        nodes = []
+      end
+
+      nodes.each do |website|
+        new_website = {}
+        new_website['gContact:website'] = website['@href']
+        new_website['type'] = website['@rel'].nil?  ? website['@label'] : website['@rel']
+        @websites << new_website
+      end
+
+      organize_websites
       organize_birthdays(@data['gContact:birthday'])
       organization_details
     end
@@ -278,6 +296,15 @@ module GContacts
 
         @org_name  = @organization['gd:orgName']
         @org_title = @organization['gd:orgTitle']
+      end
+
+      def organize_websites
+        @hashed_websites = {}
+        @websites.each do |website|
+          href, type = website['gContact:website'], website['type']
+          @hashed_websites.merge!(type => []) unless(@hashed_websites[type])
+          @hashed_websites[type] << href
+        end if @websites.any?
       end
 
       def parse_element(unparsed)
