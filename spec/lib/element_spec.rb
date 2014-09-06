@@ -136,7 +136,11 @@ describe GContacts::Element do
     end
 
     it '#hashed_phone_numbers' do
-      element.hashed_phone_numbers.should == {"mobile"=>["3005004000"], "work"=>["+130020003000"]}
+      element.hashed_phone_numbers.should == {"work"=>["3216549870"]}
+    end
+
+    it '#hashed_mobile_numbers' do
+      element.hashed_mobile_numbers.should == {"Other mobile"=>["987-654-3210"], "mobile"=>["1234567890"], "work_mobile"=>["12321312321213"]}
     end
 
     it '#hashed_websites' do

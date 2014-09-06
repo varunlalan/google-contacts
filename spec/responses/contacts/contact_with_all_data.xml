@@ -21,8 +21,10 @@
   <gd:email rel='http://schemas.google.com/g/2005#work' address='casey@gmail.com' primary='true'/>
   <gd:email rel='http://schemas.google.com/g/2005#home' address='casey.1900@gmail.com'/>
   <gd:email rel='http://schemas.google.com/g/2005#home' address='casey_case@gmail.com'/>
-  <gd:phoneNumber rel='http://schemas.google.com/g/2005#mobile'>3005004000</gd:phoneNumber>
-  <gd:phoneNumber rel='http://schemas.google.com/g/2005#work'>+130020003000</gd:phoneNumber>
+  <gd:phoneNumber label="Other mobile">987-654-3210</gd:phoneNumber>
+  <gd:phoneNumber rel="http://schemas.google.com/g/2005#mobile" uri="tel:+91-1234-567-890">1234567890</gd:phoneNumber>
+  <gd:phoneNumber rel="http://schemas.google.com/g/2005#work" uri="tel:+91-3216-549-870">3216549870</gd:phoneNumber>
+  <gd:phoneNumber rel="http://schemas.google.com/g/2005#work_mobile">12321312321213</gd:phoneNumber>
   <gd:structuredPostalAddress rel='http://schemas.google.com/g/2005#home'>
     <gd:formattedAddress>Xolo
       Dome

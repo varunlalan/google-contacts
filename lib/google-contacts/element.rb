@@ -2,10 +2,10 @@ require 'net/http'
 
 module GContacts
   class Element
-    attr_accessor :addresses, :birthday, :content, :data, :category, :emails, :etag, :groups,
-      :group_id, :hashed_addresses, :hashed_email_addresses, :hashed_phone_numbers,
-      :hashed_websites, :name, :organization, :org_name, :org_title, :phones, :title,
-      :websites
+    attr_accessor :addresses, :birthday, :content, :data, :category, :emails,
+      :etag, :groups, :group_id, :hashed_addresses, :hashed_email_addresses,
+      :hashed_phone_numbers, :hashed_mobile_numbers, :hashed_websites, :mobiles,
+      :name, :organization, :org_name, :org_title, :phones, :title, :websites
     attr_reader :batch, :edit_uri, :id, :modifier_flag, :photo_uri, :updated
 
     ##
@@ -99,6 +99,7 @@ module GContacts
       end
 
       @phones = []
+      @mobiles = []
       if entry["gd:phoneNumber"].is_a?(Array)
         nodes = entry["gd:phoneNumber"]
       elsif !entry["gd:phoneNumber"].nil?
@@ -111,12 +112,13 @@ module GContacts
         if phone.respond_to? :attributes
           new_phone = {}
           new_phone['text'] = phone
-          unless phone.attributes['rel'].nil?
-            new_phone['@rel'] = phone.attributes['rel']
+          google_category   = phone.attributes['rel'] || phone.attributes['label']
+          new_phone['@rel'] = google_category
+          if google_category.downcase.include?('mobile')
+            @mobiles << new_phone
           else
-            new_phone['@rel'] = phone.attributes['label']
+            @phones << new_phone
           end
-          @phones << new_phone
         end
       end
 
@@ -164,6 +166,14 @@ module GContacts
         @hashed_phone_numbers.merge!(type => []) unless(@hashed_phone_numbers[type])
         @hashed_phone_numbers[type] << text
       end if @phones.any?
+
+      @hashed_mobile_numbers = {}
+      @mobiles.each do |mobile|
+        type = mobile['@rel'].split("#").last
+        text = mobile['text']
+        @hashed_mobile_numbers.merge!(type => []) unless(@hashed_mobile_numbers[type])
+        @hashed_mobile_numbers[type] << text
+      end
 
       @websites = []
       if entry["gContact:website"].is_a?(Array)
