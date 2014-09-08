@@ -304,8 +304,11 @@ module GContacts
       def organization_details
         @organization.blank? && return
 
-        @org_name  = @organization['gd:orgName']
-        @org_title = @organization['gd:orgTitle']
+        org_details = @organization.is_a?(Array) ?
+          (@organization.select{ |k| k['@primary'] }.first || @organization.first) :
+          @organization
+        @org_name  = org_details['gd:orgName']
+        @org_title = org_details['gd:orgTitle']
       end
 
       def organize_websites

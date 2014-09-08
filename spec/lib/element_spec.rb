@@ -236,8 +236,8 @@ describe GContacts::Element do
 
       it 'should return organization data of a contact' do
         element.organization.should_not be_nil
-        element.organization.class.should == Hash
-        element.organization.keys.should include('gd:orgName', 'gd:orgTitle')
+        element.organization.class.should == Array
+        element.organization.map(&:keys).flatten.should include('gd:orgName', 'gd:orgTitle')
       end
 
       it 'should return NIL if no organization is specified' do
@@ -251,9 +251,9 @@ describe GContacts::Element do
         lambda { element.org_name }.should_not raise_error
       end
 
-      it 'should return organization data of a contact' do
+      it 'should return primary organization (if present) or first orgName data of a contact' do
         element.org_name.should_not be_nil
-        element.org_name.should =~ /Organisation/
+        element.org_name.should =~ /Primary/
       end
 
       it 'should return NIL if no organization is specified' do
@@ -267,9 +267,9 @@ describe GContacts::Element do
         lambda { element.org_title }.should_not raise_error
       end
 
-      it 'should return organization title of a contact' do
+      it 'should return primary organization title (if present) or first orgTitle data of a contact' do
         element.org_title.should_not be_nil
-        element.org_title.should =~ /Developer/
+        element.org_title.should =~ /True/
       end
 
       it 'should return NIL if no orgTitle is specified' do
