@@ -18,14 +18,6 @@
       Developer
     </gd:orgTitle>
   </gd:organization>
-  <gd:organization rel='http://schemas.google.com/g/2005#work' primary='true'>
-    <gd:orgName>
-      Primary
-    </gd:orgName>
-    <gd:orgTitle>
-      True
-    </gd:orgTitle>
-  </gd:organization>
   <gd:email rel='http://schemas.google.com/g/2005#work' address='casey@gmail.com' primary='true'/>
   <gd:email rel='http://schemas.google.com/g/2005#home' address='casey.1900@gmail.com'/>
   <gd:email rel='http://schemas.google.com/g/2005#home' address='casey_case@gmail.com'/>
