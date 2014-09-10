@@ -334,7 +334,7 @@ module GContacts
       end
 
       def write_tag(tag, data, indent)
-        data = CGI.escapeHTML(data)
+        data = CGI.escapeHTML(data || '')
         xml = " " * indent
         xml << "<" << tag
 
