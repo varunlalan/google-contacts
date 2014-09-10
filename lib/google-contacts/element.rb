@@ -334,7 +334,6 @@ module GContacts
       end
 
       def write_tag(tag, data, indent)
-        data = CGI.escapeHTML(data || '')
         xml = " " * indent
         xml << "<" << tag
 
@@ -362,7 +361,7 @@ module GContacts
         # Just a string, can add it and exit quickly
         if !data.is_a?(Array) and !data.is_a?(Hash)
           xml << ">"
-          xml << data.to_s
+          xml << CGI.escapeHTML(data.to_s)
           xml << "</#{tag}>\n"
           return xml
         # No other data to show, was just attributes
